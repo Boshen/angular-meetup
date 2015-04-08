@@ -43,7 +43,7 @@ module.exports = function (grunt) {
       },
       dyson: {
         files: [
-        'mock_server/**/*.coffee'
+          'mock_server/**/*.coffee'
         ],
         tasks: ['newer:coffee:dyson']
       },
@@ -61,9 +61,10 @@ module.exports = function (grunt) {
       dev: {
         bsFiles: {
           src: [
-            '<%= yeoman.app %>/*.html',
+            '<%= yeoman.app %>/**/*.html',
+            '<%= yeoman.app %>/**/*.coffee',
             '.tmp/styles/{,*/}*.css',
-            'bower_components/**/*.js',
+            '.tmp/scripts/**/*.js',
           ]
         },
         options: {
