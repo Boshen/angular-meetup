@@ -41,73 +41,60 @@ module.exports = function (grunt) {
         files: ['test/spec/{,*/}*.{coffee,litcoffee,coffee.md}'],
         tasks: ['newer:coffee:test', 'karma']
       },
+      dyson: {
+        files: [
+        'mock_server/**/*.coffee'
+        ],
+        tasks: ['newer:coffee:dyson']
+      },
       compass: {
         files: ['<%= yeoman.app %>/styles/{,*/}*.{scss,sass}'],
         tasks: ['compass:server', 'autoprefixer']
       },
       gruntfile: {
         files: ['Gruntfile.js']
-      },
-      livereload: {
-        options: {
-          livereload: '<%= connect.options.livereload %>'
-        },
-        files: [
-          '<%= yeoman.app %>/**/*.html',
-          '.tmp/styles/{,*/}*.css',
-          '.tmp/scripts/{,*/}*.js',
-          '<%= yeoman.app %>/images/{,*/}*.{png,jpg,jpeg,gif,webp,svg}'
-        ]
       }
     },
 
     // The actual grunt server settings
-    connect: {
-      options: {
-        port: 9000,
-        // Change this to '0.0.0.0' to access the server from outside.
-        hostname: 'localhost',
-        livereload: 35729
-      },
-      livereload: {
+    browserSync: {
+      dev: {
+        bsFiles: {
+          src: [
+            '<%= yeoman.app %>/*.html',
+            '.tmp/styles/{,*/}*.css',
+            'bower_components/**/*.js',
+          ]
+        },
         options: {
+          logFileChanges: false,
+          notify: false,
           open: false,
-          middleware: function (connect) {
-            return [
-              connect.static('.tmp'),
-              connect().use(
-                '/bower_components',
-                connect.static('./bower_components')
-              ),
-              connect().use(
-                '/app/styles',
-                connect.static('./app/styles')
-              ),
-              connect.static(appConfig.app)
-            ];
+          port: 9000,
+          reloadDelay: 2000,
+          watchOptions: {
+            debounceDelay: 1000
+          },
+          watchTask: true,
+          ghostMode: false,
+          server: {
+            baseDir: ['app', '.tmp'],
+            routes: {
+              "/bower_components": "bower_components"
+            },
+            middleware: function(req, res, next) {
+              var path, proxy, proxyOptions, url;
+              url = require('url');
+              proxy = require('proxy-middleware');
+              proxyOptions = url.parse('http://localhost:3000');
+              path = req._parsedUrl.pathname;
+              if (path.indexOf('api') > 0) {
+                proxy(proxyOptions)(req, res, next);
+              } else {
+                next();
+              }
+            }
           }
-        }
-      },
-      test: {
-        options: {
-          port: 9001,
-          middleware: function (connect) {
-            return [
-              connect.static('.tmp'),
-              connect.static('test'),
-              connect().use(
-                '/bower_components',
-                connect.static('./bower_components')
-              ),
-              connect.static(appConfig.app)
-            ];
-          }
-        }
-      },
-      dist: {
-        options: {
-          open: true,
-          base: '<%= yeoman.dist %>'
         }
       }
     },
@@ -204,6 +191,15 @@ module.exports = function (grunt) {
           cwd: 'test/spec',
           src: '{,*/}*.coffee',
           dest: '.tmp/spec',
+          ext: '.js'
+        }]
+      },
+      dyson: {
+        files: [{
+          expand: true,
+          cwd: 'mock_server',
+          src: '**/*.coffee',
+          dest: 'mock_server',
           ext: '.js'
         }]
       }
@@ -419,7 +415,22 @@ module.exports = function (grunt) {
         'compass:dist',
         'imagemin',
         'svgmin'
-      ]
+      ],
+      dev: {
+        tasks: ['watch', 'nodemon'],
+        options: {
+          logConcurrentOutput: true
+        }
+      }
+    },
+
+    nodemon: {
+      dev: {
+        script: 'dyson.coffee',
+        options: {
+          cwd: 'mock_server'
+        }
+      }
     },
 
     // Test settings
@@ -432,33 +443,13 @@ module.exports = function (grunt) {
   });
 
 
-  grunt.registerTask('serve', 'Compile then start a connect web server', function (target) {
-    if (target === 'dist') {
-      return grunt.task.run(['build', 'connect:dist:keepalive']);
-    }
-
-    grunt.task.run([
-      'clean:server',
-      'wiredep',
-      'concurrent:server',
-      'autoprefixer:server',
-      'connect:livereload',
-      'watch'
-    ]);
-  });
-
-  grunt.registerTask('server', 'DEPRECATED TASK. Use the "serve" task instead', function (target) {
-    grunt.log.warn('The `server` task has been deprecated. Use `grunt serve` to start a server.');
-    grunt.task.run(['serve:' + target]);
-  });
-
-  grunt.registerTask('test', [
+  grunt.registerTask('serve', [
     'clean:server',
     'wiredep',
-    'concurrent:test',
-    'autoprefixer',
-    'connect:test',
-    'karma'
+    'concurrent:server',
+    'autoprefixer:server',
+    'browserSync',
+    'concurrent:dev'
   ]);
 
   grunt.registerTask('build', [
@@ -479,7 +470,6 @@ module.exports = function (grunt) {
   ]);
 
   grunt.registerTask('default', [
-    'test',
-    'build'
+    'serve'
   ]);
 };

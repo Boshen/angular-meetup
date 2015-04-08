@@ -1,0 +1,10 @@
+{
+  "version": 3,
+  "file": "dyson.js",
+  "sourceRoot": "",
+  "sources": [
+    "dyson.coffee"
+  ],
+  "names": [],
+  "mappings": "AAAA;AAAA,MAAA,KAAA;;AAAA,EAAA,KAAA,GAAQ,OAAA,CAAQ,OAAR,CAAR,CAAA;;AAAA,EAEA,KAAK,CAAC,SAAN,CAAgB;AAAA,IACd,SAAA,EAAW,SADG;AAAA,IAEd,IAAA,EAAM,IAFQ;GAAhB,CAFA,CAAA;AAAA"
+}
