@@ -21,3 +21,11 @@ body {
 .main {
   flex-grow: 5;
 }
+
+.table > tbody > tr > td {
+  padding: 2px;
+}
+
+.cell {
+  cursor: pointer;
+}

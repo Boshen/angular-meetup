@@ -1,4 +1,18 @@
 <div>
   <h1>Step 2</h1>
-  <li ng-repeat="l in ctrl.list">a</li>
+  <button ng-click="ctrl.query()">Refresh</button>
+  <table class="table">
+    <tbody>
+      <tr ng-repeat="row in ctrl.rows">
+        <td>{{::row.id}}</td>
+        <td step-two-cell></td>
+        <td step-two-cell></td>
+        <td step-two-cell></td>
+        <td step-two-cell></td>
+        <td step-two-cell></td>
+        <td step-two-cell></td>
+        <td step-two-cell></td>
+      </tr>
+    </tbody>
+  </table>
 </div>

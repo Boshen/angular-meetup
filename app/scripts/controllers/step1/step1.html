@@ -1,21 +1,15 @@
 <div>
   <h1>Step 1</h1>
-  <table class="table table-striped table-hover">
+  <button ng-click="ctrl.query()">Refresh</button>
+  <table class="table">
     <tbody>
       <tr ng-repeat="row in ctrl.rows">
         <td>{{row.id}}</td>
-        <td><img class="img-responsive" ng-src="{{row.avatar}}" width="80"></td>
-        <td>{{row.name}}</td>
-        <td>{{row.email}}</td>
-        <td>{{row.cash1 | shortenCurrency}}</td>
-        <td>{{row.cash2 | shortenCurrency}}</td>
-        <td>{{row.cash3 | shortenCurrency}}</td>
-        <td>{{row.cash4 | shortenCurrency}}</td>
-        <td>{{row.cash5 | shortenCurrency}}</td>
-        <td>{{row.cash6 | shortenCurrency}}</td>
-        <td>{{row.cash7 | shortenCurrency}}</td>
-        <td>{{row.date | formatDate}}</td>
-        <td>{{row.address}}</td>
+        <td step-one-cell></td>
+        <td step-one-cell></td>
+        <td step-one-cell></td>
+        <td step-one-cell></td>
+        <td step-one-cell></td>
       </tr>
     </tbody>
   </table>

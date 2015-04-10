@@ -4,32 +4,38 @@ angular.module 'meetup.step1', []
 
 .filter 'formatDate', ($window)->
   (date)->
-    moment(date).format('YYYY-MM-DD')
-
-.filter 'shortenCurrency', ->
-  (value)->
-    suffixes = [
-      ''
-      'k'
-      'm'
-      'b'
-      't'
-    ]
-    suffixNum = Math.floor(('' + value).length / 3)
-    shortValue = parseFloat((if suffixNum != 0 then value / 1000 ** suffixNum else value).toPrecision(2))
-    if shortValue % 1 != 0
-      shortNum = shortValue.toFixed(1)
-    '$' + shortValue + suffixes[suffixNum]
+    $window.moment(date).format('YYYY-MM-DD HH:MM:SS')
 
 .controller 'Step1Ctrl', ($http)->
   @rows = []
 
-  init = =>
+  @query = =>
     $http.get('/api/rows')
       .then (response)=>
-        console.log response.data
         @rows = response.data.rows
 
-  init()
-
   this
+
+.directive 'stepOneCell', ($http)->
+  restrict: 'A'
+  replace: true
+  scope: {}
+  template: '''
+    <td class="cell" ng-click="ctrl.update()" ng-class="{'bg-success': ctrl.updated, 'bg-danger': !ctrl.updated}">
+      {{ctrl.date | formatDate}}
+    </td>
+  '''
+  controllerAs: 'ctrl'
+  bindToController: true
+  controller: ->
+
+    @update = =>
+      $http.get('/api/status')
+        .then (response)=>
+          @date = response.data.date
+          @updated = not @updated
+
+    @update()
+
+    this
+
