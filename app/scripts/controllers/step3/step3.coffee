@@ -1,12 +1,16 @@
 'use strict'
 
 angular.module 'meetup.step3', [
+  'meetup.services'
   'react'
 ]
 
-.controller 'Step3Ctrl', ->
+.controller 'Step3Ctrl', ($scope, WatchersService)->
   @persons = []
   @name = ''
+
+  @countWatchers = =>
+    @watchers = WatchersService.count($scope)
 
   @reset = =>
     @persons = []
@@ -23,10 +27,13 @@ angular.module 'meetup.step3', [
           gender: _.sample ['M', 'F']
           url: _.sample [null, faker.image.imageUrl()]
           ageColor: ageColor(age)
+          numbers: _.map _.range(5), -> _.random(9)
         }
 
   @refresh = =>
-    @loadPersons(@persons.length)
+    @persons = _.map @persons, (person)->
+      person.numbers = _.map _.range(5), -> _.random(9)
+      person
 
   ageColor = (age)->
     if age < 18
@@ -55,10 +62,18 @@ angular.module 'meetup.step3', [
         .filter (person)->
           person.firstname.toLowerCase().indexOf(props.filterName.toLowerCase()) is 0
         .map (person, i)->
+
           genderClass = switch person.gender
             when 'M' then 'male'
             when 'F' then 'female'
+
           labelClass = if person.url then '' else 'label label-important'
+
+          numbers = _.map person.numbers, (number, i)->
+            return (
+              <td key={i}>{number}</td>
+            )
+
           return (
             <tr key={person.id}>
               <td>{i + 1}</td>
@@ -70,6 +85,7 @@ angular.module 'meetup.step3', [
                 </span>
               </td>
               <td className={genderClass}>{person.gender}</td>
+              {numbers}
               <td>
                 <a href={person.url}>
                   <span className={labelClass}>
@@ -90,6 +106,11 @@ angular.module 'meetup.step3', [
               <th>Last Name</th>
               <th>Age</th>
               <th>Gender</th>
+              <th>1</th>
+              <th>2</th>
+              <th>3</th>
+              <th>4</th>
+              <th>5</th>
               <th>Profile</th>
             </tr>
             {rows}

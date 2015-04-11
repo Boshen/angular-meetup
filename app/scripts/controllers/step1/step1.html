@@ -1,55 +1,57 @@
-<div>
+<div class="page-header">
   <h1>Basic Implementation</h1>
-
-  <div class="well">
-    <button class="btn btn-primary" ng-click="ctrl.reset()">Reset {{ctrl.persons.length}} rows</button>
-    <button class="btn btn-success" ng-click="ctrl.loadPersons(500)">Load 500</button>
-    <button class="btn btn-warning" ng-click="ctrl.loadPersons(1000)">Load 1000</button>
-    <button class="btn btn-danger" ng-click="ctrl.loadPersons(2000)">Load 2000</button>
-    <button class="btn btn-primary" type="button" ng-click="ctrl.countWatchers()">
-      $watchers <span class="badge">{{ctrl.watchers}}</span>
-    </button>
-  </div>
-
-  <form>
-    <div class="form-group">
-      <label for="name">{{ctrl.name}}&nbsp;</label>
-      <input class="form-control" type="text" name="name" ng-model="ctrl.name" />
-    </div>
-  </form>
-
-  <table class="table table-bordered">
-    <tbody>
-
-      <tr>
-        <th>#</th>
-        <th>First Name</th>
-        <th>Last Name</th>
-        <th>Age</th>
-        <th>Gender</th>
-        <th>Profile</th>
-      </tr>
-
-      <tr ng-repeat="person in ctrl.persons | filter:{firstname:ctrl.name}" ng-class="{'male':person.gender=='M','female':person.gender=='F'}">
-        <td>{{$index + 1}}</td>
-        <td>{{person.firstname}}</td>
-        <td>{{person.lastname}}</td>
-        <td>
-          <span ng-style="ctrl.ageColor(person.age)">
-            {{person.age}}
-          </span>
-        </td>
-        <td>{{person.gender}}</td>
-        <td>
-          <a ng-href="{{person.url}}">
-            <span ng-class="{'label label-important':!person.url}">
-              {{person.url ? 'link' : 'missing'}}
-            </span>
-          </a>
-        </td>
-      </tr>
-
-    </tbody>
-  </table>
-
 </div>
+
+<div class="well">
+  <button class="btn btn-primary" ng-click="ctrl.reset()">Reset {{ctrl.persons.length}} rows</button>
+  <button class="btn btn-success" ng-click="ctrl.refresh()">Refresh {{ctrl.persons.length}} rows</button>
+  <button class="btn btn-warning" ng-click="ctrl.loadPersons(500)">Load 500</button>
+  <button class="btn btn-danger" ng-click="ctrl.loadPersons(2000)">Load 2000</button>
+  <button class="btn btn-primary" type="button" ng-click="ctrl.countWatchers()">
+    $watchers <span class="badge">{{ctrl.watchers}}</span>
+  </button>
+</div>
+
+<form>
+  <div class="form-group">
+    <label for="name">{{ctrl.name}}&nbsp;</label>
+    <input class="form-control" type="text" name="name" ng-model="ctrl.name" />
+  </div>
+</form>
+
+<table class="table table-bordered">
+  <tr>
+    <th>#</th>
+    <th>First Name</th>
+    <th>Last Name</th>
+    <th>Age</th>
+    <th>Gender</th>
+    <th>1</th>
+    <th>2</th>
+    <th>3</th>
+    <th>4</th>
+    <th>5</th>
+    <th>Profile</th>
+  </tr>
+
+  <tr ng-repeat="person in ctrl.persons" ng-class="{'male':person.gender=='M','female':person.gender=='F'}">
+    <td>{{$index + 1}}</td>
+    <td>{{person.firstname}}</td>
+    <td>{{person.lastname}}</td>
+    <td>
+      <span ng-style="ctrl.ageColor(person.age)">
+        {{person.age}}
+      </span>
+    </td>
+    <td>{{person.gender}}</td>
+    <td ng-repeat="number in person.numbers track by $index">{{number}}</td>
+    <td>
+      <a ng-href="{{person.url}}">
+        <span ng-class="{'label label-important':!person.url}">
+          {{person.url ? 'link' : 'missing'}}
+        </span>
+      </a>
+    </td>
+  </tr>
+</table>
+

@@ -15,14 +15,22 @@ angular.module 'meetup.step1', [
     @persons = []
 
   @loadPersons = (number)=>
-    persons =
+    @persons =
       _.map _.range(number), (i)->
-        firstname: faker.name.firstName()
-        lastname: faker.name.lastName()
-        age: _.random(60)
-        gender: _.sample ['M', 'F']
-        url: _.sample [null, faker.image.imageUrl()]
-    @persons = @persons.concat(persons)
+        {
+          id: i
+          firstname: faker.name.firstName()
+          lastname: faker.name.lastName()
+          age: _.random(60)
+          gender: _.sample ['M', 'F']
+          url: _.sample [null, faker.image.imageUrl()]
+          numbers: _.map _.range(5), -> _.random(9)
+        }
+
+  @refresh = =>
+    @persons = _.map @persons, (person)->
+      person.numbers = _.map _.range(5), -> _.random(9)
+      person
 
   @ageColor = (age)->
     if age < 18

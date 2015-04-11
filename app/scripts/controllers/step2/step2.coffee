@@ -26,10 +26,13 @@ angular.module 'meetup.step2', [
           gender: _.sample ['M', 'F']
           url: _.sample [null, faker.image.imageUrl()]
           ageColor: ageColor(age)
+          numbers: _.map _.range(5), -> _.random(9)
         }
 
   @refresh = =>
-    @loadPersons(@persons.length)
+    @persons = _.map @persons, (person)->
+      person.numbers = _.map _.range(5), -> _.random(9)
+      person
 
   ageColor = (age)->
     if age < 18
