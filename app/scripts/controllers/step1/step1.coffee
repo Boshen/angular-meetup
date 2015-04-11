@@ -21,7 +21,7 @@ angular.module 'meetup.step1', [
           id: i
           firstname: faker.name.firstName()
           lastname: faker.name.lastName()
-          age: _.random(60)
+          age: _.random(100)
           gender: _.sample ['M', 'F']
           url: _.sample [null, faker.image.imageUrl()]
           numbers: _.map _.range(5), -> _.random(9)

@@ -17,7 +17,7 @@ angular.module 'meetup.step2', [
   @loadPersons = (number)=>
     @persons =
       _.map _.range(number), (i)->
-        age = _.random(60)
+        age = _.random(100)
         {
           id: i
           firstname: faker.name.firstName()
