@@ -1,6 +1,7 @@
 'use strict'
 
 angular.module 'meetup', [
+  'meetup.constants'
   'meetup.services'
   'meetup.nav'
   'meetup.step1'

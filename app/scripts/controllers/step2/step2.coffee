@@ -1,10 +1,11 @@
 'use strict'
 
 angular.module 'meetup.step2', [
+  'meetup.constants'
   'meetup.services'
 ]
 
-.controller 'Step2Ctrl', ($scope, WatchersService)->
+.controller 'Step2Ctrl', ($scope, WatchersService, Colors)->
   @persons = []
   @name = ''
 
@@ -26,12 +27,12 @@ angular.module 'meetup.step2', [
           gender: _.sample ['M', 'F']
           url: _.sample [null, faker.image.imageUrl()]
           ageColor: ageColor(age)
-          numbers: _.map _.range(5), -> _.random(9)
+          colors: _.map _.range(5), -> _.sample Colors
         }
 
   @refresh = =>
     @persons = _.map @persons, (person)->
-      person.numbers = _.map _.range(5), -> _.random(9)
+      person.colors = _.map _.range(5), -> _.sample Colors
       person
 
   ageColor = (age)->

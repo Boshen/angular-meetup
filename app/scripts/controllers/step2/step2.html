@@ -44,7 +44,7 @@
       </span>
     </td>
     <td>{{::person.gender}}</td>
-    <td ng-repeat="number in person.numbers track by $index">{{number}}</td>
+    <td ng-repeat="color in person.colors track by $index" ng-style="{'background-color': color}"></td>
     <td>
       <a ng-href="{{::person.url}}">
         <span ng-class="::{'label label-important':!person.url}">

@@ -1,11 +1,12 @@
 'use strict'
 
 angular.module 'meetup.step3', [
+  'meetup.constants'
   'meetup.services'
   'react'
 ]
 
-.controller 'Step3Ctrl', ($scope, WatchersService)->
+.controller 'Step3Ctrl', ($scope, WatchersService, Colors)->
   @persons = []
   @name = ''
 
@@ -27,12 +28,12 @@ angular.module 'meetup.step3', [
           gender: _.sample ['M', 'F']
           url: _.sample [null, faker.image.imageUrl()]
           ageColor: ageColor(age)
-          numbers: _.map _.range(5), -> _.random(9)
+          colors: _.map _.range(5), -> _.sample Colors
         }
 
   @refresh = =>
     @persons = _.map @persons, (person)->
-      person.numbers = _.map _.range(5), -> _.random(9)
+      person.colors = _.map _.range(5), -> _.sample Colors
       person
 
   ageColor = (age)->
@@ -65,9 +66,9 @@ angular.module 'meetup.step3', [
 
       labelClass = if person.url then '' else 'label label-important'
 
-      numbers = _.map person.numbers, (number, i)->
+      numbers = _.map person.colors, (color, i)->
         return (
-          <td key={i}>{number}</td>
+          <td key={i} style={backgroundColor:color}></td>
         )
 
       return (
