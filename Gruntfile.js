@@ -35,17 +35,11 @@ module.exports = function (grunt) {
       },
       coffee: {
         files: ['<%= yeoman.app %>/scripts/**/*.{coffee,litcoffee,coffee.md}'],
-        tasks: ['newer:coffee:dist']
+        tasks: ['newer:cjsx:dist']
       },
       coffeeTest: {
         files: ['test/spec/{,*/}*.{coffee,litcoffee,coffee.md}'],
         tasks: ['newer:coffee:test', 'karma']
-      },
-      dyson: {
-        files: [
-          'mock_server/**/*.coffee'
-        ],
-        tasks: ['newer:coffee:dyson']
       },
       compass: {
         files: ['<%= yeoman.app %>/styles/{,*/}*.{scss,sass}'],
@@ -53,16 +47,17 @@ module.exports = function (grunt) {
       },
       gruntfile: {
         files: ['Gruntfile.js']
+      },
+      html: {
+        files: ['<%= yeoman.app %>/**/*.html']
       }
     },
 
-    // The actual grunt server settings
     browserSync: {
       dev: {
         bsFiles: {
           src: [
             '<%= yeoman.app %>/**/*.html',
-            '<%= yeoman.app %>/**/*.coffee',
             '.tmp/styles/{,*/}*.css',
             '.tmp/scripts/**/*.js',
           ]
@@ -83,18 +78,6 @@ module.exports = function (grunt) {
             routes: {
               "/bower_components": "bower_components"
             },
-            middleware: function(req, res, next) {
-              var path, proxy, proxyOptions, url;
-              url = require('url');
-              proxy = require('proxy-middleware');
-              proxyOptions = url.parse('http://localhost:3000');
-              path = req._parsedUrl.pathname;
-              if (path.indexOf('api') > 0) {
-                proxy(proxyOptions)(req, res, next);
-              } else {
-                next();
-              }
-            }
           }
         }
       }
@@ -172,7 +155,7 @@ module.exports = function (grunt) {
     },
 
     // Compiles CoffeeScript to JavaScript
-    coffee: {
+    cjsx: {
       options: {
         sourceMap: true,
         sourceRoot: ''
@@ -186,6 +169,13 @@ module.exports = function (grunt) {
           ext: '.js'
         }]
       },
+    },
+
+    coffee: {
+      options: {
+        sourceMap: true,
+        sourceRoot: ''
+      },
       test: {
         files: [{
           expand: true,
@@ -195,15 +185,6 @@ module.exports = function (grunt) {
           ext: '.js'
         }]
       },
-      dyson: {
-        files: [{
-          expand: true,
-          cwd: 'mock_server',
-          src: '**/*.coffee',
-          dest: 'mock_server',
-          ext: '.js'
-        }]
-      }
     },
 
     // Compiles Sass to CSS and generates necessary files if requested
@@ -404,7 +385,7 @@ module.exports = function (grunt) {
     // Run some tasks in parallel to speed up the build process
     concurrent: {
       server: [
-        'coffee:dist',
+        'cjsx:dist',
         'compass:server'
       ],
       test: [
@@ -412,26 +393,11 @@ module.exports = function (grunt) {
         'compass'
       ],
       dist: [
-        'coffee',
+        'cjsx',
         'compass:dist',
         'imagemin',
         'svgmin'
-      ],
-      dev: {
-        tasks: ['watch', 'nodemon'],
-        options: {
-          logConcurrentOutput: true
-        }
-      }
-    },
-
-    nodemon: {
-      dev: {
-        script: 'dyson.coffee',
-        options: {
-          cwd: 'mock_server'
-        }
-      }
+      ]
     },
 
     // Test settings
@@ -450,7 +416,7 @@ module.exports = function (grunt) {
     'concurrent:server',
     'autoprefixer:server',
     'browserSync',
-    'concurrent:dev'
+    'watch'
   ]);
 
   grunt.registerTask('build', [

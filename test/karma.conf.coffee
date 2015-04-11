@@ -18,7 +18,10 @@ module.exports = (config) ->
       'bower_components/angular/angular.js'
       'bower_components/bootstrap-sass-official/assets/javascripts/bootstrap.js'
       'bower_components/angular-ui-router/release/angular-ui-router.js'
-      'bower_components/moment/moment.js'
+      'bower_components/lodash/lodash.js'
+      'bower_components/Faker/build/build/faker.js'
+      'bower_components/react/react.js'
+      'bower_components/ngReact/ngReact.js'
       'bower_components/angular-mocks/angular-mocks.js'
       # endbower
       # bower:coffee

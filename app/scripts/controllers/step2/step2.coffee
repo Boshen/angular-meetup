@@ -1,41 +1,44 @@
 'use strict'
 
-angular.module 'meetup.step2', []
+angular.module 'meetup.step2', [
+  'meetup.services'
+]
 
-.filter 'formatDate', ($window)->
-  (date)->
-    $window.moment(date).format('YYYY-MM-DD HH:MM:SS')
+.controller 'Step2Ctrl', ($scope, WatchersService)->
+  @persons = []
+  @name = ''
 
-.controller 'Step2Ctrl', ($http)->
-  @rows = []
+  @countWatchers = =>
+    @watchers = WatchersService.count($scope)
 
-  @query = =>
-    $http.get('/api/rows')
-      .then (response)=>
-        @rows = response.data.rows
+  @reset = =>
+    @persons = []
+
+  @loadPersons = (number)=>
+    @persons =
+      _.map _.range(number), (i)->
+        age = _.random(60)
+        {
+          id: i
+          firstname: faker.name.firstName()
+          lastname: faker.name.lastName()
+          age: age
+          gender: _.sample ['M', 'F']
+          url: _.sample [null, faker.image.imageUrl()]
+          ageColor: ageColor(age)
+        }
+
+  @refresh = =>
+    @loadPersons(@persons.length)
+
+  ageColor = (age)->
+    if age < 18
+      {'background-color': 'red', color: 'white'}
+    else if age > 60
+      {'background-color': 'brown', color: 'yellow'}
+    else
+      null
+
+  @loadPersons(2)
 
   this
-
-.directive 'stepTwoCell', ($http, formatDateFilter)->
-  restrict: 'A'
-  replace: true
-  scope: {}
-  template: '''
-    <td class="cell" ng-click="ctrl.update()" ng-class="{'bg-success': ctrl.updated, 'bg-danger': !ctrl.updated}">
-      {{ctrl.date}}
-    </td>
-  '''
-  controllerAs: 'ctrl'
-  bindToController: true
-  controller: ->
-
-    @update = =>
-      $http.get('/api/status')
-        .then (response)=>
-          @date = response.data.date #formatDateFilter(response.data.date)
-          @updated = not @updated
-
-    @update()
-
-    this
-

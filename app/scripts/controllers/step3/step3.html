@@ -1,0 +1,21 @@
+<div>
+  <h1>
+   <a href="http://moduscreate.com/reangular-angular-react-merger/">React + Angular = ReAngular</a>
+  </h1>
+
+  <div class="well">
+    <button class="btn btn-primary" ng-click="ctrl.reset()">Reset {{ctrl.persons.length}} rows</button>
+    <button class="btn btn-primary" ng-click="ctrl.refresh()">Refresh {{ctrl.persons.length}} rows</button>
+    <button class="btn btn-danger" ng-click="ctrl.loadPersons(2000)">Load 2000</button>
+  </div>
+
+  <form>
+    <div class="form-group">
+      <label for="name">{{ctrl.name}}&nbsp;</label>
+      <input class="form-control" type="text" name="name" ng-model="ctrl.name" ng-model-options="{ updateOn: 'default blur', debounce: {'default': 250, 'blur': 0} }" />
+    </div>
+  </form>
+
+  <meetup-table persons="ctrl.persons" filter-name="ctrl.name"></meetup-table>
+
+</div>

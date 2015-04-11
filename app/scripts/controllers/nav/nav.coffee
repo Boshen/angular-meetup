@@ -8,6 +8,7 @@ angular.module 'meetup.nav', []
     {ref: 'intro', name: 'Intro'}
     {ref: 'step1', name: 'Step 1'}
     {ref: 'step2', name: 'Step 2'}
+    {ref: 'step3', name: 'Step 3'}
   ]
 
   @active = (nav)->

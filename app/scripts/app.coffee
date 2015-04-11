@@ -1,9 +1,12 @@
 'use strict'
 
 angular.module 'meetup', [
+  'meetup.services'
   'meetup.nav'
   'meetup.step1'
   'meetup.step2'
+  'meetup.step3'
+  'react'
   'ui.router'
 ]
 
@@ -35,6 +38,17 @@ angular.module 'meetup', [
         main:
           templateUrl: 'scripts/controllers/step2/step2.html'
           controller: 'Step2Ctrl'
+          controllerAs: 'ctrl'
+        nav:
+          templateUrl: 'scripts/controllers/nav/nav.html'
+          controller: 'NavCtrl'
+          controllerAs: 'nav'
+    .state 'step3',
+      url: '/step3'
+      views:
+        main:
+          templateUrl: 'scripts/controllers/step3/step3.html'
+          controller: 'Step3Ctrl'
           controllerAs: 'ctrl'
         nav:
           templateUrl: 'scripts/controllers/nav/nav.html'

@@ -1,16 +1,55 @@
 <div>
-  <h1>Step 1</h1>
-  <button ng-click="ctrl.query()">Refresh</button>
-  <table class="table">
+  <h1>Basic Implementation</h1>
+
+  <div class="well">
+    <button class="btn btn-primary" ng-click="ctrl.reset()">Reset {{ctrl.persons.length}} rows</button>
+    <button class="btn btn-success" ng-click="ctrl.loadPersons(500)">Load 500</button>
+    <button class="btn btn-warning" ng-click="ctrl.loadPersons(1000)">Load 1000</button>
+    <button class="btn btn-danger" ng-click="ctrl.loadPersons(2000)">Load 2000</button>
+    <button class="btn btn-primary" type="button" ng-click="ctrl.countWatchers()">
+      $watchers <span class="badge">{{ctrl.watchers}}</span>
+    </button>
+  </div>
+
+  <form>
+    <div class="form-group">
+      <label for="name">{{ctrl.name}}&nbsp;</label>
+      <input class="form-control" type="text" name="name" ng-model="ctrl.name" />
+    </div>
+  </form>
+
+  <table class="table table-bordered">
     <tbody>
-      <tr ng-repeat="row in ctrl.rows">
-        <td>{{row.id}}</td>
-        <td step-one-cell></td>
-        <td step-one-cell></td>
-        <td step-one-cell></td>
-        <td step-one-cell></td>
-        <td step-one-cell></td>
+
+      <tr>
+        <th>#</th>
+        <th>First Name</th>
+        <th>Last Name</th>
+        <th>Age</th>
+        <th>Gender</th>
+        <th>Profile</th>
       </tr>
+
+      <tr ng-repeat="person in ctrl.persons | filter:{firstname:ctrl.name}" ng-class="{'male':person.gender=='M','female':person.gender=='F'}">
+        <td>{{$index + 1}}</td>
+        <td>{{person.firstname}}</td>
+        <td>{{person.lastname}}</td>
+        <td>
+          <span ng-style="ctrl.ageColor(person.age)">
+            {{person.age}}
+          </span>
+        </td>
+        <td>{{person.gender}}</td>
+        <td>
+          <a ng-href="{{person.url}}">
+            <span ng-class="{'label label-important':!person.url}">
+              {{person.url ? 'link' : 'missing'}}
+            </span>
+          </a>
+        </td>
+      </tr>
+
     </tbody>
   </table>
+
 </div>
