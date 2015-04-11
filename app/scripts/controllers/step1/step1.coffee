@@ -11,7 +11,7 @@ angular.module 'meetup.step1', [
   @countWatchers = =>
     @watchers = WatchersService.count($scope)
 
-  @reset = =>
+  @clear = =>
     @persons = []
 
   @loadPersons = (number)=>

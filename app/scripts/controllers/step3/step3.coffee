@@ -12,7 +12,7 @@ angular.module 'meetup.step3', [
   @countWatchers = =>
     @watchers = WatchersService.count($scope)
 
-  @reset = =>
+  @clear = =>
     @persons = []
 
   @loadPersons = (number)=>
@@ -50,7 +50,49 @@ angular.module 'meetup.step3', [
 .directive 'meetupTable', (reactDirective, MeetupTable)->
   reactDirective(MeetupTable, ['persons', 'filterName'])
 
-.factory 'MeetupTable', ->
+.factory 'MeetupTableRow', ->
+  React.createClass
+    propTypes:
+      person: React.PropTypes.object.isRequired
+      index: React.PropTypes.number.isRequired
+    render: ->
+      props = @props
+      person = props.person
+
+      genderClass = switch person.gender
+        when 'M' then 'male'
+        when 'F' then 'female'
+
+      labelClass = if person.url then '' else 'label label-important'
+
+      numbers = _.map person.numbers, (number, i)->
+        return (
+          <td key={i}>{number}</td>
+        )
+
+      return (
+        <tr>
+          <td>{props.index + 1}</td>
+          <td>{person.firstname}</td>
+          <td>{person.lastname}</td>
+          <td>
+            <span style={person.ageColor}>
+              {person.age}
+            </span>
+          </td>
+          <td className={genderClass}>{person.gender}</td>
+          {numbers}
+          <td>
+            <a href={person.url}>
+              <span className={labelClass}>
+                {if person.url then 'link' else 'missing'}
+              </span>
+            </a>
+          </td>
+        </tr>
+      )
+
+.factory 'MeetupTable', (MeetupTableRow)->
   React.createClass
     propTypes:
       persons: React.PropTypes.array.isRequired
@@ -58,44 +100,13 @@ angular.module 'meetup.step3', [
     render: ->
       props = @props
 
-      rows = _.chain props.persons
-        .filter (person)->
-          person.firstname.toLowerCase().indexOf(props.filterName.toLowerCase()) is 0
-        .map (person, i)->
-
-          genderClass = switch person.gender
-            when 'M' then 'male'
-            when 'F' then 'female'
-
-          labelClass = if person.url then '' else 'label label-important'
-
-          numbers = _.map person.numbers, (number, i)->
-            return (
-              <td key={i}>{number}</td>
-            )
-
-          return (
-            <tr key={person.id}>
-              <td>{i + 1}</td>
-              <td>{person.firstname}</td>
-              <td>{person.lastname}</td>
-              <td>
-                <span style={person.ageColor}>
-                  {person.age}
-                </span>
-              </td>
-              <td className={genderClass}>{person.gender}</td>
-              {numbers}
-              <td>
-                <a href={person.url}>
-                  <span className={labelClass}>
-                    {if person.url then 'link' else 'missing'}
-                  </span>
-                </a>
-              </td>
-            </tr>
-          )
-        .value()
+      rows =
+        _.chain props.persons
+          .filter (person)->
+            person.firstname.toLowerCase().indexOf(props.filterName.toLowerCase()) is 0
+          .map (person, i)->
+            <MeetupTableRow key={i} person={person} index={i} />
+          .value()
 
       return (
         <table className="table table-bordered">
