@@ -11,6 +11,9 @@ angular.module 'meetup', [
   'ui.router'
 ]
 
+.config ($compileProvider)->
+  $compileProvider.debugInfoEnabled(false)
+
 .config ($stateProvider, $urlRouterProvider)->
 
   navView =
