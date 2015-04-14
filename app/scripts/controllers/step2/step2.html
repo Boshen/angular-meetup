@@ -34,7 +34,7 @@
     <th>Profile</th>
   </tr>
 
-  <tr ng-repeat="person in ctrl.persons track by person.id" ng-class="::{'male':person.gender=='M','female':person.gender=='F'}">
+  <tr ng-repeat="person in ctrl.persons" ng-class="::{'male':person.gender=='M','female':person.gender=='F'}">
     <td>{{::($index + 1)}}</td>
     <td>{{::person.firstname}}</td>
     <td>{{::person.lastname}}</td>
